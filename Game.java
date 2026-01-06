@@ -18,6 +18,7 @@ public class Game extends JPanel {
     // Game entities
     private final Bird bird;
     private final ArrayList<Pipe> pipes;
+    private final ArrayList<RotatedPipe> rotatedPipes;
     private BufferedImage background;
     private BufferedImage base;
     private int score = 0;
@@ -34,13 +35,26 @@ public class Game extends JPanel {
 
         // Initalise sprites
         bird = new Bird(50, 200);
+
+        // Generating Pipes
         pipes = new ArrayList<>();
-        pipes.add(new Pipe(0, 300));
-        pipes.add(new Pipe(200, 100));
+        rotatedPipes = new ArrayList<>();
+
+        int y1 = (100 + (int) (Math.random() * 128)) - 320;
+        int y2 = (100 + (int) (Math.random() * 128)) - 320;
+        int x1 = 10;// 288;
+        int x2 = 128;// 406;
+
+        pipes.add(new Pipe(x1, y1));
+        pipes.add(new Pipe(x2, y2));
+
+        rotatedPipes.add(new RotatedPipe(x1, y1 + 72 + 320));
+        rotatedPipes.add(new RotatedPipe(x2, y2 + 72 + 320));
 
         setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
     }
 
+    // Draw sprites in increasing order of z index
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);    // Paint background
@@ -49,13 +63,18 @@ public class Game extends JPanel {
         // Draw background
         g2d.drawImage(background, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, null);
 
-        // Render all pipes
+        // Draw bird
+        bird.draw(g2d);
+
+        // Draw all pipes
         for (Pipe p : pipes) {
             p.draw(g2d);
         }
 
-        // Render bird (drawn last so it appears on top)
-        bird.draw(g2d);
+        // Draw all rotated pipes
+        for (RotatedPipe rp : rotatedPipes) {
+            rp.draw(g2d);
+        }
 
         // Draw base
         g2d.drawImage(base, 0, SCREEN_HEIGHT - 112, null);
