@@ -25,5 +25,7 @@ class FlappyBird {
                 }
             }
         });
+
+        gamePanel.loop();
     }
 }

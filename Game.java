@@ -12,8 +12,9 @@ import javax.swing.JPanel;
 
 public class Game extends JPanel {
 
-    static int SCREEN_HEIGHT = 512;
-    static int SCREEN_WIDTH = 288;
+    private static final int SCREEN_HEIGHT = 512;
+    private static final int SCREEN_WIDTH = 288;
+    private static final int FPS = 60;
 
     // Game entities
     private final Bird bird;
@@ -22,6 +23,8 @@ public class Game extends JPanel {
     private BufferedImage background;
     private BufferedImage base;
     private int score = 0;
+
+    private Graphics2D g2d;
 
     // Initialize game objects
     public Game() {
@@ -42,8 +45,8 @@ public class Game extends JPanel {
 
         int y1 = (100 + (int) (Math.random() * 128)) - 320;
         int y2 = (100 + (int) (Math.random() * 128)) - 320;
-        int x1 = 10;// 288;
-        int x2 = 128;// 406;
+        int x1 = 288;
+        int x2 = 406;
 
         pipes.add(new Pipe(x1, y1));
         pipes.add(new Pipe(x2, y2));
@@ -57,24 +60,13 @@ public class Game extends JPanel {
     // Draw sprites in increasing order of z index
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);    // Paint background
-        Graphics2D g2d = (Graphics2D) g;
+        // super.paintComponent(g);    // Paint background
+        g2d = (Graphics2D) g;
 
         // Draw background
         g2d.drawImage(background, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, null);
 
-        // Draw bird
-        bird.draw(g2d);
-
-        // Draw all pipes
-        for (Pipe p : pipes) {
-            p.draw(g2d);
-        }
-
-        // Draw all rotated pipes
-        for (RotatedPipe rp : rotatedPipes) {
-            rp.draw(g2d);
-        }
+        draw();
 
         // Draw base
         g2d.drawImage(base, 0, SCREEN_HEIGHT - 112, null);
@@ -92,15 +84,39 @@ public class Game extends JPanel {
             long currentTime = System.nanoTime();
             long elapsed = currentTime - lastUpdateTime;
 
-            if (elapsed >= 1_000_000_000 / 60) {    // 60 FPS
-                update();   // Update state - event handlers, game over check
+            if (elapsed >= 1_000_000_000 / FPS) {
+                update();   // Update state
+                draw();     // Draw state
                 lastUpdateTime = currentTime;
             }
         }
     }
 
-    void update() {
+    private void update() {
+        bird.updateState();
 
+        for (Pipe p : pipes) {
+            p.update();
+        }
+
+        for (RotatedPipe rp : rotatedPipes) {
+            rp.update();
+        }
+    }
+
+    private void draw() {
+        // Draw bird
+        bird.draw(g2d);
+
+        // Draw all pipes
+        for (Pipe p : pipes) {
+            p.draw(g2d);
+        }
+
+        // Draw all rotated pipes
+        for (RotatedPipe rp : rotatedPipes) {
+            rp.draw(g2d);
+        }
     }
 
     Bird getBird() {

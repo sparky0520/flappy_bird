@@ -11,9 +11,9 @@ public class Bird extends Sprite {
         setVelocity(0, -10);    // Jump upward
     }
 
-    @Override
-    public void update() {
+    public void updateState() {
         velocityY += gravity;
         setVelocity(0, velocityY);
+        update();
     }
 }
