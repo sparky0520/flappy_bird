@@ -16,7 +16,7 @@ public class Game extends JPanel {
     static int SCREEN_WIDTH = 288;
 
     // Game entities
-    Bird bird;
+    private final Bird bird;
     private final ArrayList<Pipe> pipes;
     private BufferedImage background;
     private BufferedImage base;
@@ -24,13 +24,6 @@ public class Game extends JPanel {
 
     // Initialize game objects
     public Game() {
-        // Initalise sprites
-        bird = new Bird(50, 200);
-
-        pipes = new ArrayList<>();
-        pipes.add(new Pipe(0, 0));
-        pipes.add(new Pipe(200, 0));
-
         // Background and base
         try {
             background = ImageIO.read(new File("background-day.png"));
@@ -38,6 +31,13 @@ public class Game extends JPanel {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        // Initalise sprites
+        bird = new Bird(50, 200);
+        pipes = new ArrayList<>();
+        pipes.add(new Pipe(0, 300));
+        pipes.add(new Pipe(200, 100));
+
         setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
     }
 
@@ -49,9 +49,6 @@ public class Game extends JPanel {
         // Draw background
         g2d.drawImage(background, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, null);
 
-        // Draw base
-        g2d.drawImage(base, 0, SCREEN_HEIGHT - 112, null);
-
         // Render all pipes
         for (Pipe p : pipes) {
             p.draw(g2d);
@@ -60,10 +57,13 @@ public class Game extends JPanel {
         // Render bird (drawn last so it appears on top)
         bird.draw(g2d);
 
+        // Draw base
+        g2d.drawImage(base, 0, SCREEN_HEIGHT - 112, null);
+
         // Draw UI elements
         g2d.setColor(Color.WHITE);
-        g2d.setFont(new Font("Arial", Font.BOLD, 30));
-        g2d.drawString("Score: " + score, 10, 40);
+        g2d.setFont(new Font("Arial", Font.BOLD, 18));
+        g2d.drawString("Score: " + score, 10, 30);
     }
 
     public void loop() {
@@ -82,5 +82,9 @@ public class Game extends JPanel {
 
     void update() {
 
+    }
+
+    Bird getBird() {
+        return bird;
     }
 }

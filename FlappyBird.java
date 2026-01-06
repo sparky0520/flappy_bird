@@ -21,7 +21,7 @@ class FlappyBird {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                    gamePanel.bird.flap();
+                    gamePanel.getBird().flap();
                 }
             }
         });
