@@ -24,8 +24,10 @@ public class Game extends JPanel implements Runnable {
     private BufferedImage base;
     private Thread thread;
     private int score = 0;
+    private boolean gameOver = false;
 
     private Graphics2D g2d;
+    boolean gameStart = false;
 
     // Initialize game objects
     public Game() {
@@ -47,7 +49,7 @@ public class Game extends JPanel implements Runnable {
         int y1 = (100 + (int) (Math.random() * 128)) - 320;
         int y2 = (100 + (int) (Math.random() * 128)) - 320;
         int x1 = 288;
-        int x2 = 406;
+        int x2 = 432;
 
         pipes.add(new Pipe(x1, y1));
         pipes.add(new Pipe(x2, y2));
@@ -61,7 +63,7 @@ public class Game extends JPanel implements Runnable {
     // Draw sprites in increasing order of z index
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);    // Paint background
+        // super.paintComponent(g);    // Paint background
         g2d = (Graphics2D) g;
 
         // Draw background
@@ -99,31 +101,51 @@ public class Game extends JPanel implements Runnable {
         long lastUpdateTime = System.nanoTime();
         long deltaTime = 1_000_000_000 / FPS;
         while (thread != null) {
-            // System.out.println("Thread is running!");
+            if (gameOver) {
+                // Game exit
+                System.exit(0);
+            }
             long currentTime = System.nanoTime();
             long elapsed = currentTime - lastUpdateTime;
 
             if (elapsed >= deltaTime) {
-                update();   // Update state
-                repaint();     // Draw state
+                if (gameStart) {
+                    update();   // Update game state
+                }
+                repaint();     // Calls paintComponent() function
                 lastUpdateTime = currentTime;
             }
         }
     }
 
     private void update() {
-        bird.updateState();
+        if (bird.y >= 400) {
+            gameOver = true;
+        } else {
+            bird.updateState();
+        }
 
         for (Pipe p : pipes) {
-            if (p.x > 0) {
-                p.update();
+            if (p.x == 24) {
+                score++;
             }
+            if (p.x <= -52) {
+                p.x = 288;
+            }
+            if (bird.x > p.x && bird.x < p.x + 52 && bird.y < p.y + 320) {
+                gameOver = true;
+            }
+            p.update();
         }
 
         for (RotatedPipe rp : rotatedPipes) {
-            if (rp.x > 0) {
-                rp.update();
+            if (rp.x <= -52) {
+                rp.x = 288;
             }
+            if (bird.x > rp.x && bird.x < rp.x + 52 && bird.y < rp.y + 320) {
+                gameOver = true;
+            }
+            rp.update();
         }
     }
 

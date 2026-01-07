@@ -10,14 +10,11 @@ abstract class Sprite {
     BufferedImage image;
     int x, y;   // Position
     int velocityX, velocityY;   // Movement speed
-    // private int width, height;  // Dimensions
 
     // Constructor
     public Sprite(String imagePath, int x, int y) {
         try {
             image = ImageIO.read(new File(imagePath));
-            // width = image.getWidth();
-            // height = image.getHeight();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -36,9 +33,4 @@ abstract class Sprite {
     public void draw(Graphics g) {
         g.drawImage(image, x, y, null);
     }
-
-    // Collision detection
-    // public Rectangle getBounds() {
-    //     return new Rectangle(x, y, width, height);
-    // }
 }
