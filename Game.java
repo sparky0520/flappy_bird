@@ -67,7 +67,18 @@ public class Game extends JPanel implements Runnable {
         // Draw background
         g2d.drawImage(background, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, null);
 
-        draw();
+        // Draw bird
+        bird.draw(g2d);
+
+        // Draw all pipes
+        for (Pipe p : pipes) {
+            p.draw(g2d);
+        }
+
+        // Draw all rotated pipes
+        for (RotatedPipe rp : rotatedPipes) {
+            rp.draw(g2d);
+        }
 
         // Draw base
         g2d.drawImage(base, 0, SCREEN_HEIGHT - 112, null);
@@ -94,7 +105,7 @@ public class Game extends JPanel implements Runnable {
 
             if (elapsed >= deltaTime) {
                 update();   // Update state
-                draw();     // Draw state
+                repaint();     // Draw state
                 lastUpdateTime = currentTime;
             }
         }
@@ -113,21 +124,6 @@ public class Game extends JPanel implements Runnable {
             if (rp.x > 0) {
                 rp.update();
             }
-        }
-    }
-
-    private void draw() {
-        // Draw bird
-        bird.draw(g2d);
-
-        // Draw all pipes
-        for (Pipe p : pipes) {
-            p.draw(g2d);
-        }
-
-        // Draw all rotated pipes
-        for (RotatedPipe rp : rotatedPipes) {
-            rp.draw(g2d);
         }
     }
 
