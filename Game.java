@@ -1,9 +1,7 @@
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -19,16 +17,17 @@ public class Game extends JPanel implements Runnable {
     private static final int FPS = 60;
 
     // Game entities
-    private final Bird bird;
-    private final ArrayList<Pipe> pipes;
-    private final ArrayList<RotatedPipe> rotatedPipes;
+    private Bird bird;
+    private ArrayList<Pipe> pipes;
+    private ArrayList<RotatedPipe> rotatedPipes;
     private BufferedImage background;
     private BufferedImage base;
     private Thread thread;
-    private int score = 0;
+    private int score;
     private Graphics2D g2d;
 
-    boolean gameOver = true;
+    boolean gameStart;
+    boolean gameOver;
 
     // Initialize game objects
     public Game() {
@@ -40,23 +39,7 @@ public class Game extends JPanel implements Runnable {
             e.printStackTrace();
         }
 
-        // Initalise sprites
-        bird = new Bird(50, 200);
-
-        // Generating Pipes
-        pipes = new ArrayList<>();
-        rotatedPipes = new ArrayList<>();
-
-        int y1 = (100 + (int) (Math.random() * 100)) - 320;
-        int y2 = (100 + (int) (Math.random() * 100)) - 320;
-        int x1 = 288;
-        int x2 = 432;
-
-        pipes.add(new Pipe(x1, y1));
-        pipes.add(new Pipe(x2, y2));
-
-        rotatedPipes.add(new RotatedPipe(x1, y1 + 100 + 320));
-        rotatedPipes.add(new RotatedPipe(x2, y2 + 100 + 320));
+        init();
 
         setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
     }
@@ -93,15 +76,39 @@ public class Game extends JPanel implements Runnable {
         g2d.drawString("Score: " + score, 10, 30);
 
         if (gameOver) {
-            FontMetrics fm = g2d.getFontMetrics();
-            String text = "Game Over";
-            int x = (SCREEN_WIDTH - fm.stringWidth(text)) / 2;
-            int y = ((SCREEN_HEIGHT - fm.getHeight()) / 2) + fm.getAscent();
             // Game Over
-            g2d.setStroke(new BasicStroke(5f));
             g2d.setFont(new Font("Arial", Font.BOLD, 36));
-            g2d.drawString(text, x, y);
+            g2d.drawString("Game Over", 50, 256);
         }
+        if (!gameStart) {
+            // Press to start
+            g2d.setFont(new Font("Arial", Font.BOLD, 18));
+            g2d.drawString("Press SPACE to start", 50, 256);
+        }
+    }
+
+    public void init() {
+        score = 0;
+        gameOver = false;
+        gameStart = false;
+
+        // Initalise sprites
+        bird = new Bird(50, 200);
+
+        // Generating Pipes
+        pipes = new ArrayList<>();
+        rotatedPipes = new ArrayList<>();
+
+        int y1 = (100 + (int) (Math.random() * 100)) - 320;
+        int y2 = (100 + (int) (Math.random() * 100)) - 320;
+        int x1 = 288;
+        int x2 = 432;
+
+        pipes.add(new Pipe(x1, y1));
+        pipes.add(new Pipe(x2, y2));
+
+        rotatedPipes.add(new RotatedPipe(x1, y1 + 100 + 320));
+        rotatedPipes.add(new RotatedPipe(x2, y2 + 100 + 320));
     }
 
     public void startGameThread() {
@@ -118,7 +125,7 @@ public class Game extends JPanel implements Runnable {
             long elapsed = currentTime - lastUpdateTime;
 
             if (elapsed >= deltaTime) {
-                if (!gameOver) {
+                if (gameStart && !gameOver) {
                     update();   // Update game state
                 }
                 repaint();     // Calls paintComponent() function

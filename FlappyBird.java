@@ -23,7 +23,10 @@ class FlappyBird {
                 if (e.getKeyCode() == KeyEvent.VK_SPACE) {
                     System.out.println("Space bar pressed!");
                     if (gamePanel.gameOver) {
+                        gamePanel.init();
                         gamePanel.gameOver = false;
+                    } else if (!gamePanel.gameStart) {
+                        gamePanel.gameStart = true;
                     } else {
                         gamePanel.getBird().flap();
                     }
