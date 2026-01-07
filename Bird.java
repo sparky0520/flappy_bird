@@ -1,7 +1,7 @@
 
 public class Bird extends Sprite {
 
-    private final float gravity = 1;
+    private final float gravity = 1f;
 
     public Bird(int x, int y) {
         super("yellowbird-midflap.png", x, y);

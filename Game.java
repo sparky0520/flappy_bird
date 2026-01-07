@@ -1,7 +1,9 @@
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -24,10 +26,9 @@ public class Game extends JPanel implements Runnable {
     private BufferedImage base;
     private Thread thread;
     private int score = 0;
-    private boolean gameOver = false;
-
     private Graphics2D g2d;
-    boolean gameStart = false;
+
+    boolean gameOver = true;
 
     // Initialize game objects
     public Game() {
@@ -88,7 +89,19 @@ public class Game extends JPanel implements Runnable {
         // Draw UI elements
         g2d.setColor(Color.WHITE);
         g2d.setFont(new Font("Arial", Font.BOLD, 18));
+        // Score
         g2d.drawString("Score: " + score, 10, 30);
+
+        if (gameOver) {
+            FontMetrics fm = g2d.getFontMetrics();
+            String text = "Game Over";
+            int x = (SCREEN_WIDTH - fm.stringWidth(text)) / 2;
+            int y = ((SCREEN_HEIGHT - fm.getHeight()) / 2) + fm.getAscent();
+            // Game Over
+            g2d.setStroke(new BasicStroke(5f));
+            g2d.setFont(new Font("Arial", Font.BOLD, 36));
+            g2d.drawString(text, x, y);
+        }
     }
 
     public void startGameThread() {
@@ -101,15 +114,11 @@ public class Game extends JPanel implements Runnable {
         long lastUpdateTime = System.nanoTime();
         long deltaTime = 1_000_000_000 / FPS;
         while (thread != null) {
-            if (gameOver) {
-                // Game exit
-                System.exit(0);
-            }
             long currentTime = System.nanoTime();
             long elapsed = currentTime - lastUpdateTime;
 
             if (elapsed >= deltaTime) {
-                if (gameStart) {
+                if (!gameOver) {
                     update();   // Update game state
                 }
                 repaint();     // Calls paintComponent() function
