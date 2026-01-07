@@ -8,12 +8,11 @@ public class Bird extends Sprite {
     }
 
     public void flap() {
-        setVelocity(0, -10);    // Jump upward
+        velocityY = -10; // Jump upward
     }
 
     public void updateState() {
         velocityY += gravity;
-        setVelocity(0, velocityY);
         update();
     }
 }

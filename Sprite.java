@@ -1,6 +1,5 @@
 
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
@@ -8,17 +7,17 @@ import javax.imageio.ImageIO;
 abstract class Sprite {
 
     // State/Properties 
-    private BufferedImage image;
-    private int x, y;   // Position
-    private int width, height;  // Dimensions
+    BufferedImage image;
+    int x, y;   // Position
     int velocityX, velocityY;   // Movement speed
+    // private int width, height;  // Dimensions
 
     // Constructor
     public Sprite(String imagePath, int x, int y) {
         try {
             image = ImageIO.read(new File(imagePath));
-            width = image.getWidth();
-            height = image.getHeight();
+            // width = image.getWidth();
+            // height = image.getHeight();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -39,12 +38,7 @@ abstract class Sprite {
     }
 
     // Collision detection
-    public Rectangle getBounds() {
-        return new Rectangle(x, y, width, height);
-    }
-
-    public void setVelocity(int vx, int vy) {
-        velocityX = vx;
-        velocityY = vy;
-    }
+    // public Rectangle getBounds() {
+    //     return new Rectangle(x, y, width, height);
+    // }
 }

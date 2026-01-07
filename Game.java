@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-public class Game extends JPanel {
+public class Game extends JPanel implements Runnable {
 
     private static final int SCREEN_HEIGHT = 512;
     private static final int SCREEN_WIDTH = 288;
@@ -22,6 +22,7 @@ public class Game extends JPanel {
     private final ArrayList<RotatedPipe> rotatedPipes;
     private BufferedImage background;
     private BufferedImage base;
+    private Thread thread;
     private int score = 0;
 
     private Graphics2D g2d;
@@ -60,7 +61,7 @@ public class Game extends JPanel {
     // Draw sprites in increasing order of z index
     @Override
     protected void paintComponent(Graphics g) {
-        // super.paintComponent(g);    // Paint background
+        super.paintComponent(g);    // Paint background
         g2d = (Graphics2D) g;
 
         // Draw background
@@ -77,14 +78,21 @@ public class Game extends JPanel {
         g2d.drawString("Score: " + score, 10, 30);
     }
 
-    public void loop() {
-        long lastUpdateTime = System.nanoTime();
+    public void startGameThread() {
+        thread = new Thread(this);
+        thread.start();
+    }
 
-        while (true) {
+    @Override
+    public void run() {
+        long lastUpdateTime = System.nanoTime();
+        long deltaTime = 1_000_000_000 / FPS;
+        while (thread != null) {
+            // System.out.println("Thread is running!");
             long currentTime = System.nanoTime();
             long elapsed = currentTime - lastUpdateTime;
 
-            if (elapsed >= 1_000_000_000 / FPS) {
+            if (elapsed >= deltaTime) {
                 update();   // Update state
                 draw();     // Draw state
                 lastUpdateTime = currentTime;
@@ -96,11 +104,15 @@ public class Game extends JPanel {
         bird.updateState();
 
         for (Pipe p : pipes) {
-            p.update();
+            if (p.x > 0) {
+                p.update();
+            }
         }
 
         for (RotatedPipe rp : rotatedPipes) {
-            rp.update();
+            if (rp.x > 0) {
+                rp.update();
+            }
         }
     }
 
