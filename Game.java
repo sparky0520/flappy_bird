@@ -135,7 +135,10 @@ public class Game extends JPanel implements Runnable {
     }
 
     private void update() {
-        if (bird.y >= 400) {
+        int birdX = bird.x + 17;
+        int birdY = bird.y + 12;
+
+        if (birdY >= 400) {
             gameOver = true;
         } else {
             bird.updateState();
@@ -148,7 +151,7 @@ public class Game extends JPanel implements Runnable {
             if (p.x <= -52) {
                 p.x = 288;
             }
-            if (bird.x > p.x && bird.x < p.x + 52 && bird.y < p.y + 320) {
+            if (birdX > p.x && birdX < p.x + 52 && birdY < p.y + 320) {
                 gameOver = true;
             }
             p.update();
@@ -158,7 +161,7 @@ public class Game extends JPanel implements Runnable {
             if (rp.x <= -52) {
                 rp.x = 288;
             }
-            if (bird.x > rp.x && bird.x < rp.x + 52 && bird.y > rp.y) {
+            if (birdX > rp.x && birdX < rp.x + 52 && birdY > rp.y) {
                 gameOver = true;
             }
             rp.update();
