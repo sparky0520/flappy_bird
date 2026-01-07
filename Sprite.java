@@ -9,7 +9,7 @@ abstract class Sprite {
     // State/Properties 
     BufferedImage image;
     int x, y;   // Position
-    int velocityX, velocityY;   // Movement speed
+    float velocityX, velocityY;   // Movement speed
 
     // Constructor
     public Sprite(String imagePath, int x, int y) {

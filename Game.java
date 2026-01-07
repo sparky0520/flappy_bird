@@ -46,16 +46,16 @@ public class Game extends JPanel implements Runnable {
         pipes = new ArrayList<>();
         rotatedPipes = new ArrayList<>();
 
-        int y1 = (100 + (int) (Math.random() * 128)) - 320;
-        int y2 = (100 + (int) (Math.random() * 128)) - 320;
+        int y1 = (100 + (int) (Math.random() * 100)) - 320;
+        int y2 = (100 + (int) (Math.random() * 100)) - 320;
         int x1 = 288;
         int x2 = 432;
 
         pipes.add(new Pipe(x1, y1));
         pipes.add(new Pipe(x2, y2));
 
-        rotatedPipes.add(new RotatedPipe(x1, y1 + 72 + 320));
-        rotatedPipes.add(new RotatedPipe(x2, y2 + 72 + 320));
+        rotatedPipes.add(new RotatedPipe(x1, y1 + 100 + 320));
+        rotatedPipes.add(new RotatedPipe(x2, y2 + 100 + 320));
 
         setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
     }
@@ -142,7 +142,7 @@ public class Game extends JPanel implements Runnable {
             if (rp.x <= -52) {
                 rp.x = 288;
             }
-            if (bird.x > rp.x && bird.x < rp.x + 52 && bird.y < rp.y + 320) {
+            if (bird.x > rp.x && bird.x < rp.x + 52 && bird.y > rp.y) {
                 gameOver = true;
             }
             rp.update();
