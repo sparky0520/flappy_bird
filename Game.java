@@ -99,16 +99,15 @@ public class Game extends JPanel implements Runnable {
         pipes = new ArrayList<>();
         rotatedPipes = new ArrayList<>();
 
-        int y1 = (100 + (int) (Math.random() * 100)) - 320;
-        int y2 = (100 + (int) (Math.random() * 100)) - 320;
+        int y = (100 + (int) (Math.random() * 100)) - 320;
         int x1 = 288;
         int x2 = 432;
 
-        pipes.add(new Pipe(x1, y1));
-        pipes.add(new Pipe(x2, y2));
+        pipes.add(new Pipe(x1, y));
+        pipes.add(new Pipe(x2, y));
 
-        rotatedPipes.add(new RotatedPipe(x1, y1 + 100 + 320));
-        rotatedPipes.add(new RotatedPipe(x2, y2 + 100 + 320));
+        rotatedPipes.add(new RotatedPipe(x1, y + 100 + 320));
+        rotatedPipes.add(new RotatedPipe(x2, y + 100 + 320));
     }
 
     public void startGameThread() {
@@ -144,12 +143,14 @@ public class Game extends JPanel implements Runnable {
             bird.updateState();
         }
 
+        int y = (100 + (int) (Math.random() * 100)) - 320;
         for (Pipe p : pipes) {
             if (p.x == 24) {
                 score++;
             }
             if (p.x <= -52) {
                 p.x = 288;
+                p.y = y;
             }
             if (birdX > p.x && birdX < p.x + 52 && birdY < p.y + 320) {
                 gameOver = true;
@@ -160,6 +161,7 @@ public class Game extends JPanel implements Runnable {
         for (RotatedPipe rp : rotatedPipes) {
             if (rp.x <= -52) {
                 rp.x = 288;
+                rp.y = y + 100 + 320;
             }
             if (birdX > rp.x && birdX < rp.x + 52 && birdY > rp.y) {
                 gameOver = true;
