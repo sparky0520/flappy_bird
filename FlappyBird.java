@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 class FlappyBird {
 
     public static void main(String args[]) {
-        JFrame frame = new JFrame("Flappy Bird");
+        JFrame frame = new JFrame("Easier Flappy Bird");
         Game gamePanel = new Game();
 
         frame.add(gamePanel);
